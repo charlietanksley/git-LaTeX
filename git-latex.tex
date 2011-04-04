@@ -267,12 +267,584 @@ research ideas by going back through your history.
 
 \section{Conclusion}
 
-I don’t think a VCS is for everyone. It does take some work, and that 
-extra work might not be justified for you. But I’ll just say that I 
-don’t know anyone who has started using a good VCS (e.g, 
+I don't think a VCS is for everyone. It does take some work, and that 
+extra work might not be justified for you. But I'll just say that I 
+don't know anyone who has started using a good VCS (e.g, 
 \href{http://mercurial.selenic.com/}{Mercurial} or 
-\href{http://git-scm.com/}{git}) and regretted it. Most of us can’t 
-live without it and can’t imagine going back. Just like most of us 
-\LaTeX users can’t imagine going back to Word.
+\href{http://git-scm.com/}{git}) and regretted it. Most of us can't 
+live without it and can't imagine going back. Just like most of us 
+\LaTeX users can't imagine going back to Word.
+
+
+\section{Making branches work for you}
+
+I recently wrote a
+\href{http://www.charlietanksley.net/philtex/using-a-version-control-system/}{post about using a version control system}
+when you write LaTeX documents. In this post I want to talk about a
+specific feature of the workflow that I've adopted for my
+philosophical writing: branching.
+
+As I mentioned in the previous post, I use
+\href{http://git-scm.com/}{git} for my version control needs. One
+of the distinctive features of git is that \emph{branches} are
+cheap—that is, they are easy to create, easy to integrate into a
+workflow, and require very little memory. In this post I'm going to
+give a basic explanation of how branches work, explain a toy
+example using branches, and then explain how I recently used
+branches in a paper.
+
+(I \textbf{think} that cheap branches are a \textbf{distinctive}
+feature of git. I could be wrong about this, though. For what it is
+worth, if you are using
+\href{http://mercurial.selenic.com/}{Mercurial}, there is an
+\href{http://stevelosh.com/blog/2009/08/a-guide-to-branching-in-mercurial/}{excellent article explaining how to use bookmarks}
+in a way similar to my use of branches.)
+
+\subsection{Branches}
+
+When you use git, you put the files you are tracking in a
+repository. You make commits to this repository as you like. A
+commit has multiple parts. The two of interest to us now are the
+commit message and the change set. Suppose you have a five line
+long document and you change the second line from x to y. Then when
+you \verb!git commit -am 'meaningful commit message'! to commit
+your (tracked) document, git makes a record that says line 2 of the
+document was changed to y and attaches your message. After you've
+done this a number of times, you end up with a long trail of
+changes:
+
+\includegraphics{http://www.charlietanksley.net/images/blog/git-branches-development-line.png}
+
+Call this long line the \emph{development line} of the document.
+\emph{Branches} allow you to create multiple parallel development
+lines for one document that intersect when and where you see fit.
+
+\subsubsection{Creating branches}
+
+You create a branch in git with the \verb!git branch <branchname>!
+command. You check out a branch with
+\verb!git checkout <branchname>!. (You can create and checkout a
+branch with \verb!git checkout -b <branchname>!.) Branching is
+cheap in git in three ways. For one thing, they are easy to create
+(we just created one). More importantly, they require very little
+overhead (that you need to be aware of). Some version control
+systems apparently create a copy of the entire directory when you
+create a branch. So in effect, if I have a directory
+\verb!papers/current-paper! and I want to create a new branch, I
+end up with something like this:
+
+\begin{verbatim}
+papers/
+- current-paper(main_branch)
+- current-paper(new_branch)
+\end{verbatim}
+I guess that should count as a branch, but it seems wasteful and
+confusing. Part of the reason you are using a version control
+system is to avoid having lots of versions of your paper saved with
+various version-numbers in the name. So it seems odd to do this
+exact thing when you create a branch.
+
+When you create a branch in git, you don't really create anything
+new (strictly I suppse you create a new pointer to follow certain
+change sets, or something like that—but my point is that you don't
+create any new \emph{files}). Instead, git just keeps track of the
+different sets of changes. When you open up \verb!papers/!, you see
+one copy of your files. Suppose that file \verb!paper.tex! is 20
+paragraphs long in the main (or \emph{master}) branch. Now suppose
+you have a branch, \emph{shorter}, that is only 12 paragraphs long.
+If you are on the master branch and run
+\verb!git checkout shorter!, the copy of \verb!paper.tex! in that
+directory will become (magically!) only 12 paragraphs long. If you
+\verb!git checkout master!, then \verb!paper.tex! will change back.
+There is just one file. You could have one paper in ten different
+states, and you could make that single file be in any of those
+states with one command.
+
+This model of branching is very neat and tidy, as it ensures you
+only have one copy of each file in your directory (unless you
+duplicate it yourself, of course). You can, at any point in time,
+create a branch off any of your development lines from any point on
+said line. So you could create a branch that starts at the tip of a
+given line, or you could go back two weeks ago and create a branch
+there. Creating branches is cheap and easy.
+
+Sometimes you'll want to create a branch that branches off the main
+development line for one or two changes. I usually do this for
+submissions to journals. I take the paper at its best state and
+\verb!git checkout -b <journal name>! to create a branch for that
+journal. Then I do the things I need to do to make it ready for
+submission (like making it blind review). Then compile, print, and
+submit that version. I can then \verb!git checkout master! and
+switch back to my current version, sans any journal specific
+changes. This is nice for two reasons. First, at any point I can
+quickly and easily retrieve the exact version I submitted to the
+journal (a \verb!git branch! will tell me all my branch names, then
+I can easily check it out and compile it). Two, I don't have to
+make the changes (like making it blind review), get it ready to
+submit, and then undo all the changes for my working version. When
+I give a paper to a friend I need to have my name on the pages,
+etc., I don't want to keep it blind (or completely double-spaced or
+whatever the journal wants). It is easy to switch back to my
+current version. (Added benefit: if you don't delete the branches,
+you have an easy record of where (and when) you submitted the
+paper.)
+
+\subsubsection{Merging branches}
+
+Sometimes you want to create a branch that dead ends—like in the
+journal example. But other times you'll want to create branches
+that you want to use later. In this case, you'll get to see the
+other feature of git branches that makes branching so cheap—easy,
+fairly accurate merging. (I don't know how git merging compares to
+merging in other systems, so maybe this is all just a given;
+nevertheless, it bears mentioning here.) Branching can get
+complicated, but in most cases it is pretty straightfoward. You
+create a your \emph{shorter} branch, do some work on it, and then
+when you are ready, you checkout the \emph{master} branch and run
+\verb!git merge shorter!. Git will automatically take the changed
+lines from the \emph{shorter} branch and add them to the document
+on the \emph{master} branch.
+
+What is more, and this is kind of nice, you can have made changes
+to the \emph{master} branch at the same time. That is, the two (or
+more) branches can develop in parallel and then join back together
+at the point of your chosing. Usually, this will work out just
+fine. If, however, each branch made changes to a given line of the
+document, then you'll get a \emph{merge-conflict} and you'll have
+to go in and make a decision about what the document should look
+like at that line.
+
+(This is one (of a few) reasons to use short lines in your LaTeX
+document. Since LaTeX doesn't care about line breaks, you can
+safely hard-wrap your lines at 72 characters or whatever. This way
+a line is usually no more than one or two sentences, which reduces
+the number of merge conflicts you run into substantially.)
+
+\subsection{A simple example}
+
+In my simple example, I'll describe my typical workflow. It is
+fairly straightfoward, so I think it qualifies. I usually have two
+branches going at any one time. The default branch is the
+\emph{master} branch. I use a convention followed by many computer
+programmers and I try to never write on the \emph{master} branch.
+So whenever I start a project I immediately create a \emph{develop}
+branch. All my regular writing goes on this branch. When I finish a
+draft (generally, when I get to the point that I'm ready to show a
+round of people what I've got), I merge the paper at that point
+into the master branch. My master branches (ideally) only have
+merge commits in them. This is a new workflow for me, so not all my
+repositories follow this convention. But I like it. This means that
+I can always get the most recent draft by getting the master
+branch. This isn't as imporant in our work as it is for programmers
+(where the master branch is the stable, released version), but it
+does make some sense to me.
+
+Suppose I am writing a paper on unrestricted composition. I have a
+draft—maybe a nice 17 page paper—that I think is okay, but I feel
+like the most interesting arugment might not be the one I'm making.
+Perhaps, I realize, that if I just assume this stuff in section 2
+and section 4, then I can add in another section between sections 4
+and 5 that shows that my conclusion actually applies to more people
+than I realized.
+
+Unless I'm pretty confident that this change is the right one (and
+I usually am not), I would probably start a branch here. So
+\verb!git checkout -b new_argument! or something. Now I make all
+the changes I wanted to make and give the paper a read. If I was
+right and this was the right way to go, I can
+\verb!git checkout develop!, \verb!git merge new_argument!. If I
+realize that this was a terrible mistake, I can instead
+\verb!git branch -D new_argument! and that branch—and line of
+argument—is deleted.
+
+I like this approach because it gives me a sandbox for my writing.
+It might be overkill (like a belt and suspenders), since I can
+always check out any version of a project I want (so I could make
+the changes on the \emph{develop} branch and then, if they fail,
+just \verb!git reset --hard commit-number! to revert back to the
+old version). But I think there is something to be said in my
+defense. For one thing, I feel more free to explore in a branch. It
+is really easy and straightforward to bail on a branch. I don't
+have to find the right commit and do a (scary) hard reset. I just
+abandon ship. For another thing, suppose that halfway through these
+changes I realized that I need to make some changes to the
+conclusion. If I've got a branch, I can make that to the master
+branch and then merge the new branch in if needed, or I can make
+the change to the new branch and then cherry-pick that commit and
+merge it into my \emph{develop} branch before I throw the
+experimental branch away. Doing that without branching would be
+really difficult. (I think I would have to go back and create a
+branch after the fact to do this; why not prevent that work and
+create the branch up front?)
+
+\subsection{More}
+
+I'd like to say more, but this post is getting long. I'm going to
+write a second post that I'll put up soon that walks through
+branching in more detail.
+
+\section{Making branches work for you}
+
+I recently wrote a
+\href{http://www.charlietanksley.net/philtex/using-a-version-control-system/}{post about using a version control system}
+when you write LaTeX documents. In this post I want to talk about a
+specific feature of the workflow that I've adopted for my
+philosophical writing: branching.
+
+As I mentioned in the previous post, I use
+\href{http://git-scm.com/}{git} for my version control needs. One
+of the distinctive features of git is that \emph{branches} are
+cheap—that is, they are easy to create, easy to integrate into a
+workflow, and require very little memory. In this post I'm going to
+give a basic explanation of how branches work, explain a toy
+example using branches, and then explain how I recently used
+branches in a paper.
+
+(I \textbf{think} that cheap branches are a \textbf{distinctive}
+feature of git. I could be wrong about this, though. For what it is
+worth, if you are using
+\href{http://mercurial.selenic.com/}{Mercurial}, there is an
+\href{http://stevelosh.com/blog/2009/08/a-guide-to-branching-in-mercurial/}{excellent article explaining how to use bookmarks}
+in a way similar to my use of branches.)
+
+\subsection{Branches}
+
+When you use git, you put the files you are tracking in a
+repository. You make commits to this repository as you like. A
+commit has multiple parts. The two of interest to us now are the
+commit message and the change set. Suppose you have a five line
+long document and you change the second line from x to y. Then when
+you \verb!git commit -am 'meaningful commit message'! to commit
+your (tracked) document, git makes a record that says line 2 of the
+document was changed to y and attaches your message. After you've
+done this a number of times, you end up with a long trail of
+changes:
+
+\includegraphics{http://www.charlietanksley.net/images/blog/git-branches-development-line.png}
+
+Call this long line the \emph{development line} of the document.
+\emph{Branches} allow you to create multiple parallel development
+lines for one document that intersect when and where you see fit.
+
+\subsubsection{Creating branches}
+
+You create a branch in git with the \verb!git branch <branchname>!
+command. You check out a branch with
+\verb!git checkout <branchname>!. (You can create and checkout a
+branch with \verb!git checkout -b <branchname>!.) Branching is
+cheap in git in three ways. For one thing, they are easy to create
+(we just created one). More importantly, they require very little
+overhead (that you need to be aware of). Some version control
+systems apparently create a copy of the entire directory when you
+create a branch. So in effect, if I have a directory
+\verb!papers/current-paper! and I want to create a new branch, I
+end up with something like this:
+
+\begin{verbatim}
+papers/
+- current-paper(main_branch)
+- current-paper(new_branch)
+\end{verbatim}
+I guess that should count as a branch, but it seems wasteful and
+confusing. Part of the reason you are using a version control
+system is to avoid having lots of versions of your paper saved with
+various version-numbers in the name. So it seems odd to do this
+exact thing when you create a branch.
+
+When you create a branch in git, you don't really create anything
+new (strictly I suppse you create a new pointer to follow certain
+change sets, or something like that—but my point is that you don't
+create any new \emph{files}). Instead, git just keeps track of the
+different sets of changes. When you open up \verb!papers/!, you see
+one copy of your files. Suppose that file \verb!paper.tex! is 20
+paragraphs long in the main (or \emph{master}) branch. Now suppose
+you have a branch, \emph{shorter}, that is only 12 paragraphs long.
+If you are on the master branch and run
+\verb!git checkout shorter!, the copy of \verb!paper.tex! in that
+directory will become (magically!) only 12 paragraphs long. If you
+\verb!git checkout master!, then \verb!paper.tex! will change back.
+There is just one file. You could have one paper in ten different
+states, and you could make that single file be in any of those
+states with one command.
+
+This model of branching is very neat and tidy, as it ensures you
+only have one copy of each file in your directory (unless you
+duplicate it yourself, of course). You can, at any point in time,
+create a branch off any of your development lines from any point on
+said line. So you could create a branch that starts at the tip of a
+given line, or you could go back two weeks ago and create a branch
+there. Creating branches is cheap and easy.
+
+Sometimes you'll want to create a branch that branches off the main
+development line for one or two changes. I usually do this for
+submissions to journals. I take the paper at its best state and
+\verb!git checkout -b <journal name>! to create a branch for that
+journal. Then I do the things I need to do to make it ready for
+submission (like making it blind review). Then compile, print, and
+submit that version. I can then \verb!git checkout master! and
+switch back to my current version, sans any journal specific
+changes. This is nice for two reasons. First, at any point I can
+quickly and easily retrieve the exact version I submitted to the
+journal (a \verb!git branch! will tell me all my branch names, then
+I can easily check it out and compile it). Two, I don't have to
+make the changes (like making it blind review), get it ready to
+submit, and then undo all the changes for my working version. When
+I give a paper to a friend I need to have my name on the pages,
+etc., I don't want to keep it blind (or completely double-spaced or
+whatever the journal wants). It is easy to switch back to my
+current version. (Added benefit: if you don't delete the branches,
+you have an easy record of where (and when) you submitted the
+paper.)
+
+\subsubsection{Merging branches}
+
+Sometimes you want to create a branch that dead ends—like in the
+journal example. But other times you'll want to create branches
+that you want to use later. In this case, you'll get to see the
+other feature of git branches that makes branching so cheap—easy,
+fairly accurate merging. (I don't know how git merging compares to
+merging in other systems, so maybe this is all just a given;
+nevertheless, it bears mentioning here.) Branching can get
+complicated, but in most cases it is pretty straightfoward. You
+create a your \emph{shorter} branch, do some work on it, and then
+when you are ready, you checkout the \emph{master} branch and run
+\verb!git merge shorter!. Git will automatically take the changed
+lines from the \emph{shorter} branch and add them to the document
+on the \emph{master} branch.
+
+What is more, and this is kind of nice, you can have made changes
+to the \emph{master} branch at the same time. That is, the two (or
+more) branches can develop in parallel and then join back together
+at the point of your chosing. Usually, this will work out just
+fine. If, however, each branch made changes to a given line of the
+document, then you'll get a \emph{merge-conflict} and you'll have
+to go in and make a decision about what the document should look
+like at that line.
+
+(This is one (of a few) reasons to use short lines in your LaTeX
+document. Since LaTeX doesn't care about line breaks, you can
+safely hard-wrap your lines at 72 characters or whatever. This way
+a line is usually no more than one or two sentences, which reduces
+the number of merge conflicts you run into substantially.)
+
+\subsection{A simple example}
+
+In my simple example, I'll describe my typical workflow. It is
+fairly straightfoward, so I think it qualifies. I usually have two
+branches going at any one time. The default branch is the
+\emph{master} branch. I use a convention followed by many computer
+programmers and I try to never write on the \emph{master} branch.
+So whenever I start a project I immediately create a \emph{develop}
+branch. All my regular writing goes on this branch. When I finish a
+draft (generally, when I get to the point that I'm ready to show a
+round of people what I've got), I merge the paper at that point
+into the master branch. My master branches (ideally) only have
+merge commits in them. This is a new workflow for me, so not all my
+repositories follow this convention. But I like it. This means that
+I can always get the most recent draft by getting the master
+branch. This isn't as imporant in our work as it is for programmers
+(where the master branch is the stable, released version), but it
+does make some sense to me.
+
+Suppose I am writing a paper on unrestricted composition. I have a
+draft—maybe a nice 17 page paper—that I think is okay, but I feel
+like the most interesting arugment might not be the one I'm making.
+Perhaps, I realize, that if I just assume this stuff in section 2
+and section 4, then I can add in another section between sections 4
+and 5 that shows that my conclusion actually applies to more people
+than I realized.
+
+Unless I'm pretty confident that this change is the right one (and
+I usually am not), I would probably start a branch here. So
+\verb!git checkout -b new_argument! or something. Now I make all
+the changes I wanted to make and give the paper a read. If I was
+right and this was the right way to go, I can
+\verb!git checkout develop!, \verb!git merge new_argument!. If I
+realize that this was a terrible mistake, I can instead
+\verb!git branch -D new_argument! and that branch—and line of
+argument—is deleted.
+
+I like this approach because it gives me a sandbox for my writing.
+It might be overkill (like a belt and suspenders), since I can
+always check out any version of a project I want (so I could make
+the changes on the \emph{develop} branch and then, if they fail,
+just \verb!git reset --hard commit-number! to revert back to the
+old version). But I think there is something to be said in my
+defense. For one thing, I feel more free to explore in a branch. It
+is really easy and straightforward to bail on a branch. I don't
+have to find the right commit and do a (scary) hard reset. I just
+abandon ship. For another thing, suppose that halfway through these
+changes I realized that I need to make some changes to the
+conclusion. If I've got a branch, I can make that to the master
+branch and then merge the new branch in if needed, or I can make
+the change to the new branch and then cherry-pick that commit and
+merge it into my \emph{develop} branch before I throw the
+experimental branch away. Doing that without branching would be
+really difficult. (I think I would have to go back and create a
+branch after the fact to do this; why not prevent that work and
+create the branch up front?)
+
+\subsection{More}
+
+I'd like to say more, but this post is getting long. I'm going to
+write a second post that I'll put up soon that walks through
+branching in more detail.
+
+\ensuremath{\sim}/Documents/c/git-LaTeX[master] \$ redcloth
+git\_branching\_pt2.textile
+In
+\href{http://www.charlietanksley.net/philtex/git-branching-pt-1-of-2/}{my last post}
+I explained a bit how I use branches in my philosophical writing.
+In this post I'd like to walk through an example in a bit more
+detail, using lots of pictures.
+
+This is a dummy example, but this is exactly how I use branches, so
+I hope it is helpful. I start off with a single branch. I've been
+writing for a while, making commits to the master branch:
+
+\includegraphics{http://www.charlietanksley.net/images/blog/git-branches/initial-branch.png}
+
+Here is my repository at this point:
+
+\includegraphics{http://www.charlietanksley.net/images/blog/git-branches/terminal-initial-branch.png}
+
+I decide I want to submit this paper to a conference. In order to
+avoid having to make it blind, print it, then make it blind again
+(and so I remember which version my commentator has!), I opt to
+create a branch. \verb!git checkout -b conference_submission! does
+this for me. And look, my directory is exactly the same (save my
+git branch, which my prompt represents):
+
+\includegraphics{http://www.charlietanksley.net/images/blog/git-branches/term-changed-branches.png}
+
+I go ahead and make a change to the paper to cut it to length and
+another to make it blind. I commit both of these. You can see my
+two branches diverging here (I'm using gitx here, but you can use
+any number of gui frontends for git or just use
+\verb!git log --oneline --graph --all --decorate! to see this in
+the terminal):
+
+\includegraphics{http://www.charlietanksley.net/images/blog/git-branches/branches-diverge.png}
+
+One thing worth noting here: the \verb!paper.tex! file in my
+directory actually shrunk—nothing was duplicated in that
+directory:
+
+\includegraphics{http://www.charlietanksley.net/images/blog/git-branches/one-directory.png}
+
+\subsection{Putting branches through their paces}
+
+I could leave things here. Print out the conference version,
+\verb!git checkout master!, and keep writing on my paper, going
+back to the conference version when or if I need it. But we want to
+do something a bit more complicated here.
+
+Here is a snapshot of my git repository:
+
+\includegraphics{http://www.charlietanksley.net/images/blog/git-branches/branches-diverge.png}
+
+In this paper I decided to clean up my abstract on the conference
+version before I submitted it. Then on the master branch I changed
+one of my terms throughout and made a change to my main argument.
+(These happen at virtually the same time here, but that is an
+artefact of this example. Usually the changes to the master branch
+would've happened after the conference paper was submitted, else I
+should've made them to that version and submitted that!).
+
+Now suppose I like the abstract from my conference version and want
+to add that to my paper. I could just copy and paste, but that
+isn't very adventurous (and would not work for some changes I might
+make). Instead, I'll checkout the master branch, find the commit
+number for that commit (the SHA, in this case 835502a73), and then
+\verb!git cherry-pick 835502a73!. Here is what happens:
+
+\includegraphics{http://www.charlietanksley.net/images/blog/git-branches/post-cherry-pick.png}
+
+You see that though the 'clean up abstract' commit has a different
+sha in each branch, it is the exact same set of changes.
+Cherry-picking is not the easiest of git operations (you have to be
+sure the one commit you are adding in doesn't depend on changes you
+don't want to also cherry-pick). But it is a powerful one that
+really shows off what branching can do for you.
+
+\subsection{A more run-of-the mill example}
+
+Here is a more run of the mill example of git branches. I decide
+that I want to experiment with something, so I create a new branch.
+In this case I actually wanted to go back in my history, so I
+checked out the master branch, then checked out a specific commit
+on that branch, and from there did a
+\verb!git checkout -b new_direction! to get a new branch. You'll
+see it here, right where my conference version branches off:
+
+\includegraphics{http://www.charlietanksley.net/images/blog/git-branches/back-in-time.png}
+
+Here I've made a change to the paper—the one I wanted to try out
+(usually you'd try out more than this, surely):
+
+\includegraphics{http://www.charlietanksley.net/images/blog/git-branches/change.png}
+
+Suppose that change works out for me. I like the new direction and
+want to keep it. Now I need to merge it in. So I check out the
+master branch and \verb!git merge new_direction!. Unfortunately, in
+this case I ran into a merge conflict. When merging two branches
+together, git applies the new version to the old version. Any line
+that changed in the new version gets changed in the old version. If
+a given line, x, has changed in both versions since the branches
+diverge, you get a merge conflict. Git doesn't know which version
+of line x you want, so you have to tell it yourself. Here is my
+merge conflict notice:
+
+\includegraphics{http://www.charlietanksley.net/images/blog/git-branches/merge-conflict.png}
+
+In order to resolve this conflict I have to
+
+\begin{enumerate}
+\item
+  open \verb!paper.tex!
+\item
+  look for merge conflicts, which look like
+  this:\\\textless{}\textless{}\textless{}\textless{}\textless{}\textless{}
+  branch\_name of branch being merged onto\\line x from the
+  merge-base branch\\=====\\line x from the branch being merged
+  into the
+  base\\\textgreater{}\textgreater{}\textgreater{}\textgreater{}\textgreater{}\textgreater{}\textgreater{}
+  branch\_name of merging branch
+\item
+  delete the markers and one of the versions of line x
+\item
+  add and commit the file to git.
+\end{enumerate}
+This usually isn't very hard, though it can be kind of scary (well,
+it was for me at first).
+
+After the merge, my new\_direction branch changes are part of the
+master branch:
+
+\includegraphics{http://www.charlietanksley.net/images/blog/git-branches/post-merge.png}
+
+So now I can \verb!git branch -d new_direction! and get rid of that
+(now worthless) branch. If I had decided not to merge the change
+in, I could've run \verb!git branch -D new_direction! to get rid of
+it (the uppercase D forces git to delete branches that aren't
+merged).
+
+Now I've got a repository with two branches: my conference
+submission version waiting for acceptance and my master branch,
+which has moved on.
+
+\includegraphics{http://www.charlietanksley.net/images/blog/git-branches/final-shot.png}
+
+\subsection{Conclusion}
+
+I hope this was helpful. Let me know if you have questions about
+branching and I'll do my best to answer them. The best thing you
+can do is just experiment and play around. Remember, it is really
+hard to lose stuff in git. Just find the place you want to go in
+your history (a tool like gitx is invaluable for this unless you
+are a commandline wizard) and \verb!git checkout that-sha!. Then
+create a branch and you are off to the races.
+
+
 
 \end{document}
