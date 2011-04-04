@@ -9,7 +9,7 @@
 \date{\today}
 
 \begin{document}
-\lstset{language=[LaTeX]TeX,breaklines=true,frame=single,frameround=tttt}
+  \lstset{language=bash,breaklines=true,frame=single,frameround=tttt,basicstyle=\ttfamily}
   \maketitle
   \tableofcontents
 
@@ -46,10 +46,10 @@ VCS so powerful.
 \section{Basic mechanics}
 
 You are writing a paper, and you are doing so in \LaTeX with your 
-favorite editor.  Suppose the paper is \verb!paper.tex!, and suppose 
+favorite editor.  Suppose the paper is \lstinline!paper.tex!, and suppose 
 you are at the point where you are revising the paper—you have a draft 
 and you need to rework numerous sections. If you are using a VCS 
-(which you have already told to watch \verb!paper.tex!) your basic 
+(which you have already told to watch \lstinline!paper.tex!) your basic 
 workflow will look something like this:
 
 \begin{enumerate}
@@ -57,7 +57,7 @@ workflow will look something like this:
   Write some. Maybe you delete half of a section and rewrite it.
 \item
   \emph{Commit} your changes. That is, you have already told your VCS 
-  to keep its eyes on \verb!paper.tex!, now you are telling the VCS 
+  to keep its eyes on \lstinline!paper.tex!, now you are telling the VCS 
   about the changes you've made. Your VCS will know exactly what words 
   you changed, what you added, and what you deleted; when you commit 
   your changes you are telling the VCS to (a) save the hunk of changes 
@@ -93,7 +93,7 @@ it even easier if you have a proper workflow), and issue a single
 command to revert your paper to that old version.
 
 (I realize you could do something like this without a VCS—you could 
-save a copy of the paper \verb!good_version_from_december_7.tex! or 
+save a copy of the paper \lstinline!good_version_from_december_7.tex! or 
 whatever. I'll talk more about this below.)
 
 Or suppose that you realize that while the new version isn't better 
@@ -107,7 +107,7 @@ throughout.
 \section{But why use a VCS?}
 
 People who don't use a VCS likely have one of two approaches to paper 
-versions. One is the \verb!paper_1.tex!, \verb!paper_2.tex!, etc. 
+versions. One is the \lstinline!paper_1.tex!, \lstinline!paper_2.tex!, etc. 
 approach. With this approach, you create a new draft at every 
 significant milestone or when you want to try something new. The other 
 approach is to have one version of the paper and just plow ahead; you 
@@ -157,24 +157,24 @@ when I was using this system I knew I'd never go back to an old draft.
 So they were more or less pointless.
 
 A VCS keeps one copy of your file. It has its own mechanism for 
-keeping track of older versions. So you have one \verb!paper.tex!  
+keeping track of older versions. So you have one \lstinline!paper.tex!  
 file. If you decide you want to go back to a version from two months 
-ago, you issue a command and the contents of \verb!paper.tex! change 
+ago, you issue a command and the contents of \lstinline!paper.tex! change 
 to that old version. The new one is still there—a simple command 
-brings you back. So \verb!paper.tex! is now slightly magical: it can 
+brings you back. So \lstinline!paper.tex! is now slightly magical: it can 
 turn into any document in its history at your command.
 
 When you make a commit (tell the VCS about some changes), you write a 
 commit message. You could make these as uninformative as you like (my 
 first few months of messages were pretty weak). So if you change the 
 definition of 'four-dimensionalism' throughout you could have a commit 
-message that reads \verb!made some changes! or \verb!changed the 
+message that reads \lstinline!made some changes! or \lstinline!changed the 
 definition of four-dimensionalism throughout!. If you go with the 
 latter, then when you look at your history you can see exactly what 
 you did.
 
 Most VCSs will let you tag a version of a file. So you could say that 
-the version of \verb!paper.tex! from 8am on November 2010 is v1.0. 
+the version of \lstinline!paper.tex! from 8am on November 2010 is v1.0. 
 When you do that, you should have the option to write a detailed 
 message about this version. So you could say what you liked about this 
 version but what you are thinking about changing.  Then when you look 
@@ -246,7 +246,7 @@ to work!)
 I use my VCS, git, for this all the time. I'm fond of a program called 
 \href{http://jonas.nitro.dk/tig/}{Tig} that lets me view a graphical 
 representation of my git repository in a terminal (there are other GUI 
-alternatives). So I run \verb!tig --all! in a terminal and can very 
+alternatives). So I run \lstinline!tig --all! in a terminal and can very 
 quickly see where I've been working recently.  This is something like 
 a high-tech version of reading the last paragraph you wrote yesterday 
 before you start writing today. Only this version is quite helpful 
