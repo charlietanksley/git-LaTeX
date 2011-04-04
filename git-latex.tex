@@ -14,29 +14,29 @@
   \tableofcontents
 
 If you are using \LaTeX, you should be using a version control system 
-or VCS. In this post I’m going to explain what a VCS is and why you 
-should use one. In a later post I’ll explain how I use the particular 
+or VCS. In this post I'm going to explain what a VCS is and why you 
+should use one. In a later post I'll explain how I use the particular 
 version control system I use, \href{http://git-scm.com}{git}. Which 
 version control system you use is not terribly important. But I think 
 using a VCS is.
 
 \section{What is a VCS?}
 
-If you’ve ever used the ‘Track Changes’ feature in Microsoft Word, 
-you’ve used \emph{revision control}. A \emph{version control system} 
+If you've ever used the 'Track Changes' feature in Microsoft Word, 
+you've used \emph{revision control}. A \emph{version control system} 
 is a program that basically tracks the revisions you make to your 
-document. The term ‘version control’ comes from the idea that this 
+document. The term 'version control' comes from the idea that this 
 software tracks versions of your documents. Apparently that is the way 
 old VCSs worked; now, 
 \href{http://www.joelonsoftware.com/items/2010/03/17.html}{from what I 
   have read}, apparently the VCS you will use tracks sets of changes 
 to your document, not revisions. From my perspective, that is a 
-distinction without a difference, though under the hood I’m guessing 
+distinction without a difference, though under the hood I'm guessing 
 it makes a substantial difference.
 
 So a version control system is a way for you, the author of a paper, 
 to track the changes you have made to that document. But there is a 
-difference between ‘Track Changes’ and a VCS—with a VCS, you are in 
+difference between 'Track Changes' and a VCS—with a VCS, you are in 
 control: you save \textbf{chunks} of changes, not individual changes 
 (though an individual change is the smallest chunk!). What is more, 
 you manually append a message to each hunk of changes. These messages, 
@@ -58,7 +58,7 @@ workflow will look something like this:
 \item
   \emph{Commit} your changes. That is, you have already told your VCS 
   to keep its eyes on \verb!paper.tex!, now you are telling the VCS 
-  about the changes you’ve made. Your VCS will know exactly what words 
+  about the changes you've made. Your VCS will know exactly what words 
   you changed, what you added, and what you deleted; when you commit 
   your changes you are telling the VCS to (a) save the hunk of changes 
   you just made as one \textbf{unit} and (b) attach a description of 
@@ -70,7 +70,7 @@ workflow will look something like this:
 \end{enumerate}
 Most of your time will be spent like that. You will change section 1, 
 then tell your VCS to save those changes along with the comment 
-‘changed section 1 to narrow the focus’, for example.
+'changed section 1 to narrow the focus', for example.
 
 \section{Slightly more advanced mechanics}
 
@@ -86,17 +86,17 @@ These major rewrites are common. They are also scary. What if you make
 all those changes and the new version turns out worse than the current 
 version? How would you go back to where you started?
 
-If you are using a VCS, that mistake isn’t quite so terrible. It isn’t 
+If you are using a VCS, that mistake isn't quite so terrible. It isn't 
 terrible because all you have to do is look at the history of your 
-document, find the old version (this isn’t very hard, and you can make 
+document, find the old version (this isn't very hard, and you can make 
 it even easier if you have a proper workflow), and issue a single 
 command to revert your paper to that old version.
 
 (I realize you could do something like this without a VCS—you could 
 save a copy of the paper \verb!good_version_from_december_7.tex! or 
-whatever. I’ll talk more about this below.)
+whatever. I'll talk more about this below.)
 
-Or suppose that you realize that while the new version isn’t better 
+Or suppose that you realize that while the new version isn't better 
 than the old version, the new definition you introduced for that term 
 (and changed throughout the document) is much better. If you know how 
 to use your VCS, you can throw away all the changes you made to the 
@@ -106,7 +106,7 @@ throughout.
 
 \section{But why use a VCS?}
 
-People who don’t use a VCS likely have one of two approaches to paper 
+People who don't use a VCS likely have one of two approaches to paper 
 versions. One is the \verb!paper_1.tex!, \verb!paper_2.tex!, etc. 
 approach. With this approach, you create a new draft at every 
 significant milestone or when you want to try something new. The other 
@@ -118,16 +118,16 @@ make a mistake.
 paper in a Dropbox folder. If you do this, then every time you save 
 the file you will replace the old version, \textbf{but} Dropbox will 
 keep that old revision for some amount of time. So you can use Dropbox 
-to go back in time to an older version (Mac OS X’s Time Machine does 
+to go back in time to an older version (Mac OS X's Time Machine does 
 the same thing). This is kind of like a Track-Changes-in-chunks 
 feature, where the chunks are demarcated by your saving operations. 
-But I don’t think it is as good as using a VCS. More on this to 
+But I don't think it is as good as using a VCS. More on this to 
 follow.)
 
-These aren’t terrible strategies at all. And maybe you don’t want to 
-(or can’t) be bothered with learning yet another new piece of software 
+These aren't terrible strategies at all. And maybe you don't want to 
+(or can't) be bothered with learning yet another new piece of software 
 to track your changes, so maybe you want to stick with one of these 
-methods. That’s fine; you should stick with your current strategy.
+methods. That's fine; you should stick with your current strategy.
 
 But there is a better way: use a VCS. I think there are \textbf{four} 
 advantages to using a VCS:
@@ -139,7 +139,7 @@ advantages to using a VCS:
   It allows you to experiment for low cost.
 \item
   It gives you control over your version history. And control is a 
-  good thing (you use \LaTeX don’t you?  Isn’t that because it gives 
+  good thing (you use \LaTeX don't you?  Isn't that because it gives 
   you control over your work?).
 \item
   It gives you an actual \emph{history} for your document.
@@ -149,11 +149,11 @@ advantages to using a VCS:
 
 Above I noted that there are two common strategies for keeping up with 
 drafts. The first is the save-multiple-drafts method. Everyone knows 
-this method is no good. You usually don’t have a clue about what has 
+this method is no good. You usually don't have a clue about what has 
 changed from draft to draft. There is no way to use the information in 
 the old draft unless you just go back to it and throw out anything new 
-you’ve done. This kind of system is like a safety net of sorts. But 
-when I was using this system I knew I’d never go back to an old draft. 
+you've done. This kind of system is like a safety net of sorts. But 
+when I was using this system I knew I'd never go back to an old draft. 
 So they were more or less pointless.
 
 A VCS keeps one copy of your file. It has its own mechanism for 
@@ -167,7 +167,7 @@ turn into any document in its history at your command.
 When you make a commit (tell the VCS about some changes), you write a 
 commit message. You could make these as uninformative as you like (my 
 first few months of messages were pretty weak). So if you change the 
-definition of ‘four-dimensionalism’ throughout you could have a commit 
+definition of 'four-dimensionalism' throughout you could have a commit 
 message that reads \verb!made some changes! or \verb!changed the 
 definition of four-dimensionalism throughout!. If you go with the 
 latter, then when you look at your history you can see exactly what 
@@ -189,10 +189,10 @@ version to the next. The previous versions were dead to me. Instead, I
 just plowed ahead with one version, making changes as I saw fit.
 
 The problem with this approach is fear. If you have a decent draft, 
-you don’t want to ruin it by taking a risk. So that good idea goes 
+you don't want to ruin it by taking a risk. So that good idea goes 
 unexplored. If I strike off in a new direction and change my mind, I 
-can’t go back. So I don’t want to experiment. I’ll take a new 
-direction, but only if I’m pretty sure about it.
+can't go back. So I don't want to experiment. I'll take a new 
+direction, but only if I'm pretty sure about it.
 
 With a VCS, I can stick with the barge-ahead method, but I know I can 
 always go back to wherever I need. It seems to me to be the best of 
@@ -212,11 +212,11 @@ repository and write a commit message. At first this might seem like a
 nuisance. And for some it might be. But I like it. I like that it 
 gives me a chance to plan what I want do to do next, to do just that 
 much, and then to explain what I did. It gives my writing more 
-purpose. I’m not sitting down to bang out ideas and words—I’m sitting 
+purpose. I'm not sitting down to bang out ideas and words—I'm sitting 
 down to explain how this conclusion is a problem for so-and-so. That 
 direction helps me as a writer.
 
-Dropbox and Word’s Track Changes will keep track of versions of your 
+Dropbox and Word's Track Changes will keep track of versions of your 
 paper. But you have very little control over what those versions look 
 like. If you save often and reflexively (or automatically), then the 
 difference between two Dropbox versions might be a single sentence. 
@@ -224,7 +224,7 @@ And there is no way to know what that difference is (well, you could
 save each version separately and use a diff tool to see, but that is a 
 lot of work!). With a VCS, you determine how many, and which, changes 
 are worth marking as a single hunk of work. Sometimes this is a 
-burden. But usually it isn’t a very big deal. And the payoff is big: 
+burden. But usually it isn't a very big deal. And the payoff is big: 
 the different versions are meaningful, not random. They are in your 
 control.
 
@@ -235,19 +235,19 @@ or months (perhaps because you got busy, perhaps to look at it with
 fresh eyes). How do you get reacquainted with the project when you 
 pick it back up? You could just get cracking. Or you could read the 
 whole paper. If you are using a VCS, you could view the log of commit 
-messages you made. Though it won’t always do the trick, this can 
-really put you back in touch with the paper. You don’t just see what 
+messages you made. Though it won't always do the trick, this can 
+really put you back in touch with the paper. You don't just see what 
 you \textbf{have}, you see what you \textbf{had} and why you changed 
 it to what you have now. You can see that you were spending lots of 
 time on section 7, that you had doubts about a given argument, or 
 whatever. (Of course, you have to have good commit messages for this 
 to work!)
 
-I use my VCS, git, for this all the time. I’m fond of a program called 
+I use my VCS, git, for this all the time. I'm fond of a program called 
 \href{http://jonas.nitro.dk/tig/}{Tig} that lets me view a graphical 
 representation of my git repository in a terminal (there are other GUI 
 alternatives). So I run \verb!tig --all! in a terminal and can very 
-quickly see where I’ve been working recently.  This is something like 
+quickly see where I've been working recently.  This is something like 
 a high-tech version of reading the last paragraph you wrote yesterday 
 before you start writing today. Only this version is quite helpful 
 when you are revising.
