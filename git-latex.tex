@@ -168,8 +168,9 @@ When you make a commit (tell the VCS about some changes), you write a
 commit message. You could make these as uninformative as you like (my 
 first few months of messages were pretty weak). So if you change the 
 definition of 'four-dimensionalism' throughout you could have a commit 
-message that reads \lstinline!made some changes! or \lstinline!changed the 
-definition of four-dimensionalism throughout!. If you go with the 
+message that reads \lstinline!made some changes! or 
+\lstinline!changed the definition of four-dimensionalism throughout!. 
+If you go with the 
 latter, then when you look at your history you can see exactly what 
 you did.
 
@@ -264,6 +265,26 @@ creative/intellectual history of the work.
 This seems like a good idea to me, if you are interested in such 
 things. If you kept good commit messages, you might find some new 
 research ideas by going back through your history.
+
+\section{Using git with \LaTeX }
+
+\subsection{The vc bundle}
+If you ever print versions of your papers, it's useful to know which version
+  you have actually printed.
+Or if you send a PDF version to a colleague, it's useful to know which version they've got.
+You could, of course, look at the date that is typically part of your title.
+However, if you made several commits on one day, it might not be obvious which one corresponds to your printed version.
+The \href{http://www.ctan.org/tex-archive/support/vc/}{vc bundle} allows you to
+  put the commit hash (e.g. \lstinline!bd7127a!) into your document, so you know which version it corresponds to.
+
+This does, however, require some messing around.
+Basically, what the \lstinline!vc! shell script does is write a \lstinline!.tex! file
+  that defines a bunch of commands like \lstinline!\GITHash!.
+
+
+\subsection{Using git with emacs}
+
+\subsection{Using git with vim}
 
 \section{Conclusion}
 
